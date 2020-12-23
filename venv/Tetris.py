@@ -1,15 +1,20 @@
 import pygame
 import random
 
+#CREDIT TO: Timur Bakibayev at gitconnected https://levelup.gitconnected.com/writing-tetris-in-python-2a16bddb5318
+#Programme made with this tutorial and expanded to add functionality, making the game more similar to the original NES game
+#made colours specific to piece type
+
 #piece colours
-colors = [
-    (0, 0, 0),
-    (120, 37, 179),
-    (100, 179, 179),
-    (80, 34, 22),
-    (80, 134, 22),
-    (180, 34, 22),
-    (180, 34, 122),
+colours = [
+    (0,0,0),
+    (52, 235, 235),#cyan i piece
+    (25, 68, 255),#blue j piece
+    (255, 155, 25),#orange l piece
+    (144, 25, 255),#purple t piece
+    (247, 255, 25),#yellow o piece
+    (56, 255, 25),#green s piece
+    (255, 36, 36),#red z piece
 ]
 
 class Figure:
@@ -34,11 +39,11 @@ class Figure:
         self.x = x
         self.y = y
         self.type = random.randint(0, len(self.figures) - 1)
-        self.color = random.randint(1, len(colors) - 1)
+        self.colour = self.type + 1 # +1 to avoid i piece disappearing when setting colours
         self.rotation = 0
 
     def image(self):
-        return self.figures[self.type] [self.rotation]
+        return self.figures[self.type][self.rotation]
 
     def rotate(self):
         self.rotation = (self.rotation + 1) % len(self.figures[self.type])
@@ -96,7 +101,7 @@ class Tetris:
         for i in range(4):
             for j in range(4):
                 if i * 4 + j in self.figure.image():
-                    self.field[i + self.figure.y] [j + self.figure.x] = self.figure.color
+                    self.field[i + self.figure.y][j + self.figure.x] = self.figure.colour
         self.break_lines()
         self.new_figure()
         if self.intersects():
@@ -125,6 +130,7 @@ class Tetris:
             self.figure.y += 1
         self.figure.y -= 1
         self.lock()
+
     #sends piece down one
     def go_down(self):
         self.figure.y += 1
@@ -145,6 +151,7 @@ class Tetris:
         self.figure.rotate()
         if self.intersects():
             self.figure.rotation = old_rotation
+
 #initialise game
 pygame.init()
 
@@ -206,7 +213,7 @@ while not done:
         for j in range(game.width):
             pygame.draw.rect(screen, GRAY, [game.x + game.zoom * j, game.y + game.zoom * i, game.zoom, game.zoom], 1)
             if game.field[i][j] > 0:
-                pygame.draw.rect(screen, colors[game.field[i][j]],
+                pygame.draw.rect(screen, colours[game.field[i][j]],
                                  [game.x + game.zoom * j + 1, game.y + game.zoom * i + 1, game.zoom - 2, game.zoom - 1])
 
 
@@ -215,7 +222,7 @@ while not done:
             for j in range(4):
                 p = i * 4 + j
                 if p in game.figure.image():
-                    pygame.draw.rect(screen, colors[game.figure.color],
+                    pygame.draw.rect(screen, colours[game.figure.colour],
                                      [game.x + game.zoom * (j + game.figure.x) + 1,
                                       game.y + game.zoom * (i + game.figure.y) + 1,
                                       game.zoom - 2, game.zoom - 2])
