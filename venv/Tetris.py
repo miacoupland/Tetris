@@ -48,7 +48,6 @@ class Figure:
     def rotate(self):
         self.rotation = (self.rotation + 1) % len(self.figures[self.type])
 
-
 class Tetris:
     level = 2
     score = 0
@@ -178,6 +177,7 @@ pressing_down = False
 while not done:
     if game.figure is None:
         game.new_figure()
+
     counter += 1
     if counter > 100000:
         counter = 0
@@ -216,7 +216,6 @@ while not done:
                 pygame.draw.rect(screen, colours[game.field[i][j]],
                                  [game.x + game.zoom * j + 1, game.y + game.zoom * i + 1, game.zoom - 2, game.zoom - 1])
 
-
     if game.figure is not None:
         for i in range(4):
             for j in range(4):
@@ -228,7 +227,7 @@ while not done:
                                       game.zoom - 2, game.zoom - 2])
 
     font = pygame.font.SysFont('Calbiri', 25, True, False)
-    font1 = pygame.font.SysFont('Calibri', 65, True, False)
+    font1 = pygame.font.SysFont('Calibri', 40, True, False)
     text = font.render("Score: " + str(game.score), True, BLACK)
     text_game_over = font1.render("Game Over", True, (255, 125, 0))
     text_game_over1 = font1.render("Press ESC", True, (255, 215, 0))
